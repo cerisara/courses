@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+</head>
+<body>
+<script src="../tf.min.js">
+</script>
+<script>
+
+// Create a rank-2 tensor (matrix) matrix tensor from a multidimensional array.
+const a = tf.tensor([[1, 2], [3, 4]]);
+console.log('shape:', a.shape);
+a.print();
+
+const c = a.reshape([4, 1]);
+console.log('c shape:', c.shape);
+c.print();
+
+// Or you can create a tensor from a flat array and specify a shape.
+const shape = [2, 2];
+const b = tf.tensor([1, 2, 3, 4], shape);
+console.log('shape:', b.shape);
+b.print();
+
+//  call x.data() or x.array() to do the computations
+// the sync version blocks the UI thread:
+console.log(a.arraySync());
+
+const y = a.add(b);  // equivalent to tf.add(a, b)
+y.print();
+b.dispose(); // Equivalant to tf.dispose(a) -- otherwise, may create MEM leaks with WebGL backend !
+
+// auto-dispose intermediary vars
+const Z = tf.tidy(() => {
+  const result = a.square().log().neg();
+  return result;
+});
+
+console.log(tf.getBackend());
+
+
+console.log(tf.memory());
+
+const model = tf.sequential();
+model.add(tf.layers.dense({inputShape: [784], units: 32, activation: 'relu'}));
+model.add(tf.layers.dense({units: 10, activation: 'softmax'}));
+
+model.summary();
+
+console.log(tf.memory());
+
+const saveResult = async() => { await model.save('localstorage://my-model-1'); }
+{
+	const model = async() => { await tf.loadLayersModel('localstorage://my-model-1'); }
+}
+
+class SquaredSumLayer extends tf.layers.Layer {
+ constructor() {
+   super({});
+ }
+ // In this case, the output is a scalar.
+ computeOutputShape(inputShape) { return []; }
+
+ // call() is where we do the computation.
+ call(input, kwargs) { return input.square().sum();}
+
+ // Every layer needs a unique name.
+ getClassName() { return 'SquaredSum'; }
+}
+
+const t = tf.tensor([-2, 1, 0, 5]);
+const o = new SquaredSumLayer().apply(t);
+o.print(); // prints 30
+
+model.compile({
+	optimizer: 'sgd',
+	loss: 'categoricalCrossentropy',
+	metrics: ['accuracy']
+});
+
+const data = tf.randomNormal([100, 784]);
+const labels = tf.randomUniform([100, 10]);
+ep=-1;
+function onBatchEnd(batch, logs) {
+    if (batch==0) ep+=1;
+    document.getElementById("cout").innerHTML += "<p>accbatch "+ep+" "+batch+" "+logs.acc+"</p>";
+}
+
+// Train for 5 epochs with batch size of 32.
+model.fit(data, labels, {
+   epochs: 5,
+   batchSize: 32,
+   callbacks: {onBatchEnd}
+ }).then(info => {
+   document.getElementById("cout").innerHTML += info.history.acc.join(" .. ");
+ });
+
+
+</script>
+
+<p id="cout"></p>
+
+</body>
+</html>
+
