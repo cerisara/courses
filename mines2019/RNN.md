@@ -52,7 +52,7 @@ It exploits a *global* context => stronger than Markov models
 
 ## Basic RNN
 
-![](../coursML2018/rnn.jpg){ width=300 }
+![](imgs/rnn.jpg){ width=300 }
 
 $s_t=f(Ux_t+Ws_{t-1})$
 
@@ -60,7 +60,7 @@ Training: BPTT
 
 Difference with standard BP = gradients at every timestep are summed
 
-![](../coursML2018/bptt.png){ width=300 }
+![](imgs/bptt.png){ width=300 }
 
 $$\frac{\partial E_3}{\partial W} = \sum_{k=0}^3 \frac{\partial E_3}{\partial \hat y_3} \frac{\partial \hat y_3}{\partial s_3} \left( \prod_{j=k+1}^3 \frac {\partial s_j}{\partial s_{j-1}} \right) \frac{\partial s_k}{\partial W}$$
 
@@ -76,7 +76,7 @@ $$\frac {\partial E_y}{\partial l_1} = \frac{\partial E_y}{\partial y}\frac{\par
 
 Derivative of the tanh:
 
-![](../coursML2018/tanhdiff.png){ width=250 }
+![](imgs/tanhdiff.png){ width=250 }
 
 Multiplying by numbers < 1 decreases the magnitude, layer after layer.
 
@@ -133,7 +133,7 @@ http://karpathy.github.io/2015/05/21/rnn-effectiveness/
   - Translation: English sentence -> French sentence
   - ...
 
-![](../coursML2018/seq2seq.png){ width=450 }
+![](imgs/seq2seq.png){ width=450 }
 
 - It is a kind of "Encoder-Decoder" architecture
 - Trick in the decoder RNN:
@@ -145,7 +145,7 @@ http://karpathy.github.io/2015/05/21/rnn-effectiveness/
   - But this creates a mismatch between training and testing
   - Professor forcing:
 
-![](professor-forcing.png){ width=450 }
+![](imgs/professor-forcing.png){ width=450 }
 
 # Attention
 
@@ -160,7 +160,7 @@ http://karpathy.github.io/2015/05/21/rnn-effectiveness/
 - Compute a new summary vector: $z = \sum_i \alpha_i z_i$
 
 Ex with Seq2seq:
-![](../coursML2018/attention.png){ width=200 }
+![](imgs/attention.png){ width=200 }
 
 - $q$ = current decoder hidden state
 - $z_i$ = encoder hidden states
@@ -177,12 +177,12 @@ Ex with Seq2seq:
   - Basis of Key-value memory networks
 - Multi-head attention:
 
-![](../coursML2018/transformer0.png){ width=300 }
+![](imgs/transformer0.png){ width=300 }
 
 - Self-attention: Q=K=V=words X
 - Transformer:
 
-![](../coursML2018/transformer.png){ width=300 }
+![](imgs/transformer.png){ width=300 }
 
 - No recurrence !
 - Used in all recent deep learning models
