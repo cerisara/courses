@@ -52,7 +52,7 @@ It exploits a *global* context => stronger than Markov models
 
 ## Basic RNN
 
-![](https://raw.githubusercontent.com/cerisara/courses/master/imgs/rnn.jpg)
+![](imgs/rnn.jpg)
 
 $s_t=f(Ux_t+Ws_{t-1})$
 
