@@ -52,7 +52,7 @@ It exploits a *global* context => stronger than Markov models
 
 ## Basic RNN
 
-![](imgs/rnn.jpg){ width=300 }
+![](imgs/rnn.jpg?raw=true)
 
 $s_t=f(Ux_t+Ws_{t-1})$
 
